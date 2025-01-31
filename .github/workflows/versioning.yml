@@ -1,0 +1,61 @@
+name: Semantic Versioning POC
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  versioning:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '6.0.x'
+
+      - name: Install GitVersion Tool
+        run: dotnet tool install --global GitVersion.Tool --version 5.*
+
+      - name: Add .NET Tools Path
+        run: echo "${HOME}/.dotnet/tools" >> $GITHUB_PATH
+
+      - name: Run GitVersion
+        id: gitversion
+        run: dotnet-gitversion . /output json /output buildserver
+
+      - name: Output GitVersion
+        run: |
+          echo "Version: ${{ steps.gitversion.outputs.semVer }}"
+
+      - name: Tag Release
+        if: github.ref == 'refs/heads/main'
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git tag -a "v${{ steps.gitversion.outputs.semVer }}" -m "Release v${{ steps.gitversion.outputs.semVer }}"
+          git push origin "v${{ steps.gitversion.outputs.semVer }}"
+
+      - name: Create Output Directory
+        run: mkdir -p build/output
+
+      - name: Create a dummy file to be artifact
+        run: echo "This is a dummy build artifact file. Version: ${{ steps.gitversion.outputs.semVer }}" > build/output/artifact.txt
+
+
+      - name: Publish Build Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-${{ steps.gitversion.outputs.semVer }}
+          path: build/output
