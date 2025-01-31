@@ -40,14 +40,14 @@ jobs:
 
       - name: Output GitVersion
         run: |
-          echo "Version: v1.1.0${{ steps.gitversion.outputs.semVer }}"
+          echo "Version: ${{ steps.gitversion.outputs.semVer }}"
 
       - name: Tag Release
         if: github.ref == 'refs/heads/main'
         run: |
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
-          git tag -a "${{ steps.gitversion.outputs.semVer }}" -m "Release v${{ steps.gitversion.outputs.semVer }}"
+          git tag -a "v2${{ steps.gitversion.outputs.semVer }}" -m "Release v${{ steps.gitversion.outputs.semVer }}"
           git push origin "v${{ steps.gitversion.outputs.semVer }}"
 
       - name: Create Output Directory
