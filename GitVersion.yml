@@ -1,0 +1,6 @@
+mode: Mainline
+branches:
+  main:
+    tag: ''
+  develop:
+    tag: beta
