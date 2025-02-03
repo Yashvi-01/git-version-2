@@ -40,7 +40,7 @@ jobs:
 
       - name: Debug GitVersion Output
         run: |
-          echo "GitVersion Output: ${{ steps.gitversion.outputs.semVer }}"
+          echo "GitVersion Output  (full): ${{ steps.gitversion.outputs.semVer }}"
 
 
       - name: Output GitVersion
