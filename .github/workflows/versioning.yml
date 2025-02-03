@@ -38,6 +38,11 @@ jobs:
         id: gitversion
         run: dotnet-gitversion . /output json /output buildserver
 
+      - name: Debug GitVersion Output
+        run: |
+          echo "GitVersion Output: ${{ steps.gitversion.outputs.semVer }}"
+
+
       - name: Output GitVersion
         run: |
           echo "Version: ${{ steps.gitversion.outputs.semVer }}"
@@ -47,7 +52,7 @@ jobs:
         run: |
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
-          git tag -a "v2${{ steps.gitversion.outputs.semVer }}" -m "Release v${{ steps.gitversion.outputs.semVer }}"
+          git tag -a "v${{ steps.gitversion.outputs.semVer }}" -m "Release v${{ steps.gitversion.outputs.semVer }}"
           git push origin "v${{ steps.gitversion.outputs.semVer }}"
 
       - name: Create Output Directory
