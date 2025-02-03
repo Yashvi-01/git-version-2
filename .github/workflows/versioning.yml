@@ -61,7 +61,7 @@ jobs:
 
       - name: Create a dummy file to be artifact
         run: |
-         echo "This is a dummy build artifact file. Version: ${{ steps.gitversion.outputs.semVer }}" > build/output/artifact.txt
+         echo "Hello GuysI am robot" Version: ${{ steps.gitversion.outputs.semVer }}" > build/output/artifact.txt
          ls -l build/output
       - name: Publish Build Artifacts
         uses: actions/upload-artifact@v4
