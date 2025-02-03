@@ -48,7 +48,7 @@ jobs:
           echo "Version: ${{ steps.gitversion.outputs.semVer }}"
 
       - name: Tag Release
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
         run: |
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
