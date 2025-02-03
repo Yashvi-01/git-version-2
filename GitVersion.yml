@@ -1,8 +1,8 @@
 mode: Mainline
 branches:
   main:
-    increment: Minor   # Or Patch depending on your preference
-    tag: 'v'            # Use "v" prefix for main version (e.g., v1.0.0)
+    increment: Minor   
+    tag: 'v'           
   develop:
-    increment: Patch    # Increments patch for develop
-    tag: 'beta'         # Will generate versions like 1.0.0-beta.1
+    increment: Patch   
+    tag: 'beta'        
