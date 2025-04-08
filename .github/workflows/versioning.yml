@@ -1,27 +1,30 @@
 name: Deploy to Lightsail Instance
+
 on:
   workflow_dispatch:
     inputs:
       Branch_name:
-        description: Choose a branch to deploy
+        description: 'Choose a branch to deploy'
         required: true
-        default: develop
+        default: 'develop'
         type: string
       environment:
-        description: Choose an environment instance
+        description: 'Choose an environment instance'
         required: true
         type: choice
         options:
           - testdevapi.consark.ai
           - demoai-api.consark.ai
           - aidevapp-api.consark.ai
+
 permissions:
   contents: read
   id-token: write
   pages: write
+
 jobs:
   Build-deploy-Testdevapi:
-    if: '${{ github.event.inputs.environment == ''testdevapi.consark.ai'' }}'
+    if: ${{ github.event.inputs.environment == 'testdevapi.consark.ai' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -29,9 +32,9 @@ jobs:
       - name: Deploy via SSH to testdevapi.consark.ai
         uses: appleboy/ssh-action@v1.0.0
         with:
-          host: '${{ secrets.TEST_HOST }}'
-          username: '${{ secrets.TEST_USER }}'
-          key: '${{ secrets.TEST_DEPLOY_KEY }}'
+          host: ${{ secrets.TEST_HOST }}
+          username: ${{ secrets.TEST_USER }}
+          key: ${{ secrets.TEST_DEPLOY_KEY }}
           port: 22
           script: |
             cd /home/ec2-user/git-repo/supernova_v2.1
@@ -41,8 +44,9 @@ jobs:
             docker-compose down
             docker-compose up --build -d
             docker ps
+
   Build-deploy-Demoai:
-    if: '${{ github.event.inputs.environment == ''demoai-api.consark.ai'' }}'
+    if: ${{ github.event.inputs.environment == 'demoai-api.consark.ai' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -50,20 +54,21 @@ jobs:
       - name: Deploy via SSH to demoai-api.consark.ai
         uses: appleboy/ssh-action@v1.0.0
         with:
-          host: '${{ secrets.DEMO_HOST }}'
-          username: '${{ secrets.DEMO_USER }}'
-          key: '${{ secrets.DEMO_DEPLOY_KEY }}'
+          host: ${{ secrets.DEMO_HOST }}
+          username: ${{ secrets.DEMO_USER }}
+          key: ${{ secrets.DEMO_DEPLOY_KEY }}
           port: 22
-          script: | 
+          script: |
             cd /home/ec2-user/new_git_setup/supernova_v2.1
-            git fetch origin 
+            git fetch origin
             git checkout ${{ github.event.inputs.Branch_name }}
             git pull origin ${{ github.event.inputs.Branch_name }}
             docker-compose down
             docker-compose up --build -d
             docker ps
+
   Build-deploy-Aidevapp:
-    if: '${{ github.event.inputs.environment == ''aidevapp-api.consark.ai'' }}'
+    if: ${{ github.event.inputs.environment == 'aidevapp-api.consark.ai' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -71,10 +76,10 @@ jobs:
       - name: Deploy via SSH to aidevapp-api.consark.ai
         uses: appleboy/ssh-action@v1.0.0
         with:
-          host: '${{ secrets.AIDEV_HOST }}'
-          username: '${{ secrets.AIDEV_USER }}'
-          key: '${{ secrets.AIDEV_DEPLOY_KEY }}'
-          port: 22 
+          host: ${{ secrets.AIDEV_HOST }}
+          username: ${{ secrets.AIDEV_USER }}
+          key: ${{ secrets.AIDEV_DEPLOY_KEY }}
+          port: 22
           script: |
             cd /home/ec2-user/supernova_v2.1
             git fetch origin
